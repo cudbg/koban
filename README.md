@@ -60,6 +60,8 @@ Research Quesions
 =====
 
 1. Can we even predict [links, content] that user will [click, view]?  User eyebrowse dataset as proof of concept
+1. Is it possible to compute the confidence in a given suggested content/bookmark?
+1. How to deal with slightly-less-static websites?
 1. How to present identified content?
     * add bookmark Links at the top
     * Separate iGoogle-style page/sidebar
