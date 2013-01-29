@@ -15,6 +15,7 @@ Current mishmash of ideas
    present it earlier in user's web browsing session
 1. Identify content spread across multiple pages or hierarchy of links, e.g., pagination and collect content into one place
 1. In general, identify common data structures embeded within or across pages (e.g., lists, trees) and allow reorganizing the data items
+    * The same way databases have fixed set of general operators, are there a fixed set of xforms that are "good enough"?
 1. Retarget extracted content into filetype-specific optimized templates (think readability or image gallery)
 1. CTS can be used as mechanism.  Automatically generate CTS transformations
 
@@ -28,6 +29,50 @@ Use Cases
 1. webmail.csail page is simply a redirect to the /horde login page.  Move login form onto the landing page
 1. Dropbox landing page hides login form behind a tiny link.  Move the form to a prominent location
 1. Amazon product page is a list of sections (e.g., reviews, product details, etc). I always skip sections and read other sections.  Push the reviews up to the top of the page
+
+
+Development
+==========
+
+
+The current implementation contains a chrome extension that adds content to the top of
+registered webpages, and a backend server that downloads and extracts content to be added.
+
+The user statically implements content extractors in the backend.  For example, if I want
+to extract and include the modern love article on the top of the nytimes.com home page, I
+need to
+
+1. write an extractor for the modern love page and
+2. register the extractor to nytimes.com in the backend
+
+### Requires
+
+* node.js
+* coffeescript
+* cake
+* python + pyquery + requests + flask
+
+### Install
+
+Build chrome extension
+
+    git clone https://github.com/mitdbg/koban.git
+    cd koban/chrome
+    npm install
+    cake build
+
+Install chrome extension
+
+    go to "chrome://extensions" in chrome
+    check "developer mode"
+    click "load upacked extension" button
+    go to 'build' directory (contains manifest.json)
+
+Install server
+
+    cd koban/backend
+    pip install pyquery requests flask
+    python server.py
 
 
 Related Work
@@ -48,11 +93,19 @@ Construct content alignment between multiple pages
 [WebMantage](http://research.microsoft.com/en-us/um/people/horvitz/montage.htm)
 
 [EyeBrowse](http://eyebrowse.csail.mit.edu/)
-Open web analytics
+Open web analytics.  The code is hidden somewhere in listit's [massive repo](http://code.google.com/p/list-it/)
 
 WebScraping
 
 * How is this different than webscraping?
+
+[Mira Dontcheva](http://www.adobe.com/technology/people/san-francisco/mira-dontcheva.html)
+
+* [Attaching UI Enhancements to Websites ](http://research.microsoft.com/pubs/141332/2008chi_reform.pdf)
+* [summarizing personal browsing sessions](http://dontcheva.org/pubs/DontchevaUIST06.pdf)
+
+[Boilerpipe](http://www.l3s.de/~kohlschuetter/boilerplate/)
+Boilerplate detection and removal.  See [paper](http://www.l3s.de/~kohlschuetter/publications/wsdm187-kohlschuetter.pdf)
 
 
 
