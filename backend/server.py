@@ -7,17 +7,45 @@ import requests
 import pdb
 import traceback
 
+class Handlers:
+    """
+    Manager for url->content extractor mappings
+    """
+    def __init__(self):
+        self.s_handlers = {}
+        self.f_handlers = {}
+
+    def put(self, matcher, f):
+        """
+        @param matcher is string and do exact match or a boolean function
+        @param f call back that takes the actual url as input and returns
+                 a list of HTML fragments to add to the page
+        """
+        if isinstance(matcher, basestring):
+            self.s_handlers[matcher] = f
+        else:
+            self.f_handlers[matcher] = f
+
+    def run(self, url):
+        ret = []
+        if url in self.s_handlers:
+            ret.extend(self.s_handlers[url](url))
+        for matcher, cb in self.f_handlers.iteritems():
+            if matcher(url):
+                ret.extend(cb(url))
+        return filter(bool, ret)
+
+
+
+
 app = Flask(__name__)
-handlers = {}
+handlers = Handlers()
 
 @app.route('/', methods=['POST', 'GET'])
 def getit():
     url = request.form.get('url', request.args.get('url', None))
-    html = None
-    contents = []
     print url
-    if url in handlers:
-        contents = filter(bool, handlers[url](url))
+    contents = handlers.run(url)
     return json.dumps({'contents':contents})
 
 def fetch(url):
@@ -42,7 +70,7 @@ def csail_webmail(start_url):
         attrs = ' '.join(["%s = '%s'" % (k,v) for k,v in form.items()])
         contents.append("<%s %s>%s</%s>" % (tag, attrs, pq(form).html(), tag))
     return contents
-handlers['http://webmail.csail.mit.edu/'] = csail_webmail
+handlers.put('http://webmail.csail.mit.edu/', csail_webmail)
 
 
 
