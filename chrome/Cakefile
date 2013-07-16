@@ -37,7 +37,7 @@ build = (callback) ->
   commands.push 'cp -r src/html build/'
   commands.push 'cp -r src/font build/'
   # TODO(pwnall): consider optipng
-  commands.push 'cp -r src/images build/'
+  #commands.push 'cp -r src/images build/'
   for inFile in glob.sync 'src/less/**/*.less'
     continue if path.basename(inFile).match /^_/
     outFile = inFile.replace(/^src\/less\//, 'build/css/').
